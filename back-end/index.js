@@ -6,7 +6,7 @@ const port=5000
 
 const server=http.createServer(app)
 
-
+ 
 
 let connectedUserData=[]
 // socket io
@@ -21,20 +21,24 @@ io.on("connection",(socket)=>{
    socket.on("connection",(data)=>{
     connectedUserData.push({id:socket.id,name:data.name})
     console.log(connectedUserData)
+    
    })
-console.log(socket.id)
-
-
-
-socket.on("message",(message)=>{
-    console.log(message)
-})
- 
   
+ 
+
+  
+ 
+socket.on("message",(message)=>{
+    const {id}=connectedUserData.find((item)=>item.name.toUpperCase()==message.to.toUpperCase())
+    socket.to(id).emit("recive-message",message.message)
+})
+   
+   
    socket.on("disconnect",(data)=>{
     const id=socket.id
     connectedUserData=connectedUserData.filter(data=>data.id!==id)
     console.log(connectedUserData)
+    
     
    })
 })
@@ -42,7 +46,7 @@ socket.on("message",(message)=>{
   
 
 
-
+ 
 
 // routes.
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:5000");
 const App = () => {
@@ -19,6 +19,12 @@ const App = () => {
     socket.emit("message",{to,message})
 
   }
+
+  useEffect(()=>{
+socket.on("recive-message",(data)=>{
+  setMEssage(data)
+})
+  },[])
 
   return (
     <div>
